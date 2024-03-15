@@ -2,5 +2,5 @@
     "name": "Uncle Ringo",
     "symbol": "RINGO",
     "description": "Carnival token.",
-    "image": ""
+    "image": "https://raw.githubusercontent.com/jay-aat/solana-token/main/token/public/uncle_ringo_token.jpg"
   }
