@@ -218,6 +218,67 @@ function MintToken2() {
     }
   }
 
+  async function updateTokenMetadata() {
+    try {
+      if (!wallet.publicKey || !wallet.signTransaction) { throw new WalletNotConnectedError(); }
+
+      const mintingTokenPubKey = mintPubKey == "" ? mint.publicKey : new PublicKey(mintPubKey);
+      console.log(`Mint public key: ${mintingTokenPubKey.toBase58()}`);
+
+      const token_metadata_program_id = new PublicKey(TOKEN_METADATA_PROGRAM_ID);
+
+      const [metadata_key] = await PublicKey.findProgramAddressSync([
+        Buffer.from('metadata'),
+        token_metadata_program_id.toBuffer(),
+        mintingTokenPubKey.toBuffer(),
+      ],
+        TOKEN_METADATA_PROGRAM_ID
+      );
+
+      const transactionInstructions: TransactionInstruction[] = [];
+
+      transactionInstructions.push(
+        createUpdateMetadataAccountV2Instruction(
+          {
+            metadata: metadata_key,
+            updateAuthority: wallet.publicKey,
+          },
+          {
+            updateMetadataAccountArgsV2:
+            {
+              data: {
+                name: "XXX",
+                symbol: "X3",
+                uri: "",
+                sellerFeeBasisPoints: 0,
+                creators: null,
+                collection: null,
+                uses: null
+              },
+              updateAuthority: wallet.publicKey,
+              primarySaleHappened: true,
+              isMutable: true,
+            }
+          }
+        )
+      );
+
+      const transaction = new Transaction().add(...transactionInstructions);
+
+      const signature = await configureAndSendCurrentTransaction(
+        transaction,
+        connection,
+        wallet.publicKey,
+        null,
+        wallet.signTransaction
+      );
+      console.log(`Transaction signature: ${signature}`);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div>
@@ -228,6 +289,7 @@ function MintToken2() {
           {/* <button onClick={checkBalance}>Check Balance</button>
           <button onClick={sendToken}>Send Token</button> */}
           <button onClick={setTokenMetadata}>Set Token Metadata</button>
+          <button onClick={updateTokenMetadata}>Update Token Metadata</button>
         </div>
       </div>
     </>
