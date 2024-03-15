@@ -51,7 +51,7 @@ function MintToken2() {
 
   let mint: Keypair;
 
-  const mintPubKey: string = "H36krQtF1o8FQGi2iV1dj3X1MDuooM1axvpRDoxueygb";
+  const mintPubKey: string = "";
 
   async function createToken() {
     try {
@@ -126,7 +126,7 @@ function MintToken2() {
           mintingTokenPubKey,
           associatedAccount,
           wallet.publicKey,
-          50e9,
+          200000000e9,
           9
         )
       );
@@ -187,9 +187,9 @@ function MintToken2() {
             createMetadataAccountArgsV3:
             {
               data: {
-                name: "Random50",
-                symbol: "RD50",
-                uri: "",
+                name: "Uncle Ringo",
+                symbol: "RINGO",
+                uri: "https://raw.githubusercontent.com/jay-aat/solana-token/main/token/public/token_metadata_uncle_ringo.json",
                 sellerFeeBasisPoints: 0,
                 creators: null,
                 collection: null,
